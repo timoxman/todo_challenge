@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" ng-app="ToDo">
+  <head>
+    <meta charset="utf-8">
+    <title>To Do List</title>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/listCtrl.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+
+  <body>
+    <h1 class="page-header">
+      Tim's to do list
+    </h1>
+    <div ng-controller="ToDoCtrl as toDoCtrl" class="col-md-3">
+      <form class="form-horizontal" ng-submit="toDoCtrl.addToList()">
+      <!-- min length not working for 0 length , put in JS instead-->
+        <input type="text" class="form-control" ng-model="toDoCtrl.newListItem" placeholder="Type your thing to do here" minlength=3>
+        <select class="btn btn-info" ng-model="toDoCtrl.newImportance">
+          <option selected="selected" disabled="disabled">Select importance of task</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+        <button class="btn btn-info">Add item to toDo list</button>
+      </form>
+
+      <button class="btn btn-info" ng-click="toDoCtrl.clearDone()">Clear done items</button>
+
+      <form action="">
+      <!-- why doesn't checked="checked" work ?-->
+        Filter Priority :
+        <input type="radio" name="priority" ng-model="search.importance" value="High">High
+        <input type="radio" name="priority" ng-model="search.importance" value="Medium">Medium
+        <input type="radio" name="priority" ng-model="search.importance" value="Low">Low
+        <input type="radio" name="priority" ng-model="search.importance" value="">All
+      </form> <br>
+
+      <table class="table table-condensed">
+        <tr ng-repeat="item in toDoCtrl.toDoList.items |filter:search" ng-class = "{success:item.done}">
+        <!-- <tr ng-repeat="item in toDoCtrl.toDoList.items |filter:(item.importance === toDoCtrl.priority)" ng-class = "{success:item.done}"> -->
+          <td> {{item.text}} </td>
+          <td> {{item.importance}}</td>
+          <td> {{item.importance === toDoCtrl.priority}}</td>
+          <td ng-if="!item.done"><button class="btn btn-info" ng-click="toDoCtrl.completeItem(item.no)">Complete</button></td>
+        </tr>
+      </table>
+
+    </div>
+  </body>
+</html>
